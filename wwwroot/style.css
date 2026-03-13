@@ -1,0 +1,203 @@
+:root {
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    --primary: #64ffda;
+    --primary-hover: #4caf9a;
+    --secondary: #f44381;
+    --text-main: #ffffff;
+    --text-muted: #b3b3b3;
+    --border-color: #333333;
+    --radius-lg: 10px;
+    --radius-md: 6px;
+    --shadow-soft: 0 4px 8px rgba(0, 0, 0, 0.3);
+    --input-bg: #333333;
+    --input-focus: #424242;
+    --font-main: 'Roboto', sans-serif;
+    --transition-fast: 0.2s ease-in-out;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--bg-body);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 720px;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    background-color: var(--input-bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 12px 15px;
+    font-size: 1rem;
+    color: var(--text-main);
+    transition: all var(--transition-fast);
+    outline: none;
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23b3b3b3' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 16px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    background-color: var(--input-focus);
+    box-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
+    transform: translateY(-1px);
+}
+
+.helper-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+button,
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 50px;
+    border: none;
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+
+button[type="submit"],
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #121212;
+    box-shadow: 0 6px 12px rgba(100, 255, 218, 0.4);
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-hover), var(--secondary));
+    box-shadow: 0 8px 16px rgba(100, 255, 218, 0.5);
+    transform: translateY(-2px);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+    .container {
+        padding: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row .form-group {
+        flex: auto;
+    }
+
+    button,
+    .btn {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .form-actions>* {
+        width: 100%;
+    }
+
+
+
+}
+     

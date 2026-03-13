@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aprovação de Solicitação</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Decisão da Solicitação</h1>
+            <p id="status">Carregando solicitação...</p>
+        </header>
+
+        <div class="form-group">
+            <label for="comentario">Comentário (opcional)</label>
+            <textarea id="comentario"
+                placeholder="Informe o motivo da reprovação ou observações adicionais." required></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" onclick="decidir('Aprovado')">
+                Aprovar
+            </button> 
+            <button class="btn btn-primary" onclick="decidir('Reprovar')">
+                Reprovar
+            </button>
+            <button class="btn btn-primary" onclick="decidir('Desistir')">
+                Desistir
+            </button>
+        </div>
+    </div>
+
+    <script>
+       let enviado =false;
+
+       const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+
+        if (!token) {
+            document.getElementById("status").innerText = "Token inválido ou expirado.";
+        } else {
+            document.getElementById("status").innerText =
+                "Solicitação encontrada. Escolha uma ação abaixo.";
+        }
+
+        function decidir(status) {
+
+    if (enviado) return;
+
+    const comentario = document.getElementById("comentario").value;
+
+    let mensagem = "";
+
+    if (status === "Aprovado")
+        mensagem = "Tem certeza que deseja APROVAR esta solicitação?";
+        
+    if (status === "Reprovar")
+        mensagem = "Tem certeza que deseja REPROVAR esta solicitação?";
+        
+    if (status === "Desistir")
+        mensagem = "Tem certeza que deseja DESISTIR desta solicitação?";
+
+    const confirmar = confirm(mensagem);
+
+    if (!confirmar) return;
+
+    enviado = true;
+
+    fetch("/api/decidir", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            token: token,
+            status: status,
+            comentario: comentario
+        })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error();
+        return res.text();
+    })
+    .then(() => {
+        alert("Decisão registrada com sucesso!");
+        document.querySelector(".form-actions").style.display = "none";
+    })
+    .catch(() => {
+        alert("Erro ao processar a decisão.");
+        enviado = false;
+    });
+}
+    function Desistir() {
+    if (!token) {
+        alert("Token inválido.");
+        return;
+    }
+
+    const confirmar = confirm("Tem certeza que deseja Desistir da solicitação?");
+    if (!confirmar) return;
+
+    fetch("/api/desistir", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ token })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Erro no servidor");
+        alert("Desistência enviada com sucesso.");
+    })
+    .catch(err => {
+        alert("Erro ao enviar desistência.");
+        console.error(err);
+    });
+}
+    </script>
+</body>
+
+</html>

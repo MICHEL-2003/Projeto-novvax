@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Renegociar Solicitação</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Renegociar Solicitação</h1>
+            <p>Atualize os dados e reenvie para aprovação.</p>
+        </header>
+
+        <input type="hidden" id="token">
+
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" placeholder="Explique os ajustes realizados na solicitação."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="prazo">prazo</label>
+            <input type="date" id="prazo" required>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn btn-primary" onclick="aprovar()">Aprovar</button>
+
+            <button class="btn btn-primary" onclick="reprovar()">Reprovar</button>
+
+            <button class="btn btn-primary" onclick="desistir()"> desistir</button>
+            <script>
+            const token = new URLSearchParams(window.location.search).get("token");
+                let enviado = false;
+
+            function aprovar() {
+
+                document.querySelectorAll(".form-actions button").forEach(btn => {
+                    btn.disabled = true;
+                });
+                if (enviado) return;
+
+                if (!confirm("Tem certeza que deseja APROVAR esta renegociação?"))
+                    return;
+
+                enviado = true;
+
+                fetch("/api/aprovar-renegociacao", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ token })
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    alert("Proposta aprovada.");
+                    window.location = "/sucesso.html";
+                })
+                .catch(() => {
+                    alert("Erro ao aprovar");
+                    enviado = false;
+                });
+            }
+
+            function reprovar() {
+
+                if (enviado) return;
+
+                const comentario = document.getElementById("descricao").value;
+                const prazo = document.getElementById("prazo").value;
+
+                if (!comentario) {
+                    alert("Explique sua contraproposta.");
+                    return;
+                }
+
+                if (!confirm("Tem certeza que deseja enviar esta CONTRA-PROPOSTA?"))
+                    return;
+
+                enviado = true;
+
+                fetch("/api/reprovar-renegociacao", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ token, comentario, prazo })
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    alert("Contra-proposta enviada ao responsável.");
+                    window.location = "/sucesso.html";
+                })
+                .catch(() => {
+                    alert("Erro ao enviar contra-proposta");
+                    enviado = false;
+                });
+            }
+
+           function desistir() {
+
+            if (enviado) return;
+
+            if (!confirm("Tem certeza que deseja DESISTIR da solicitação?"))
+                return;
+
+            enviado = true;
+
+            fetch("/api/desistir", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error();
+                alert("Solicitação desistida.");
+                window.location = "/sucesso.html";
+            })
+            .catch(() => {
+                alert("Erro ao desistir");
+                enviado = false;
+            });
+        }
+            
+        </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Atividade</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Nova Solicitação</h1>
+            <p>Preencha os detalhes da atividade para enviar ao responsável pela aprovação.</p>
+        </header>
+           
+        <form id="formSolicitacao"  action="api/enviar" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                <input
+                    id="titulo"
+                    name="titulo"
+                    type="text"
+                    placeholder="Ex: Campanha de e-mail marketing Q2"
+                    required
+                >
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="setor">Setor</label>
+                    <select id="setor" name="setor" required>
+                        <option value="">Selecione</option>
+                        <option value="ADM">ADM</option>
+                        <option value="Novvax">Novvax</option>
+                        <option value="InoltraTech">InoltraTech</option>
+                        <option value="BlissFactory">BlissFactory</option>
+                        <option value="Quasar">Quasar</option>
+                        <option value="RH">RH</option>
+                        <option value="Financeiro">Financeiro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="responsavel">Responsável</label>
+                    <select id="responsavel" name="responsavel" required>
+                        <!-- 🔑 VALUES = CHAVES USADAS NO BACKEND -->
+                        <option value="">Selecione</option>
+                        <option value="giovana">Giovana Oliveira</option>
+                        <option value="renato">Renato Grandchamp</option>
+                        <option value="ana">Ana Silva</option>
+                        <option value="marcelo">Marcelo Grandchamp</option>
+                        <option value="ramis">Ramis Damasceno</option> 
+                        <option value="michel">Michel Richard </option>
+                        <option value="guilherme">Guilherme Sousa</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <textarea
+                required
+                    id="descricao"
+                    name="descricao"
+                    placeholder="Descreva o objetivo, contexto e entregáveis esperados."
+                ></textarea>            
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="prazo" required >Prazo desejado </label>
+                    <input id="prazo" type="date" name="prazo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" required>Email do solicitante</label>
+                    <input id="Solicitante_email" type="email" name="Solicitante_email" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="files">Anexos</label>
+                <input id="files" type="file" name="files" multiple>
+            </div>
+
+            <div class="form-actions">
+                <button id="btnEnviar" class="btn btn-primary" type="submit">
+                  Enviar solicitacao
+                </button>        
+            </div>
+        </form>
+            <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const form = document.getElementById("formSolicitacao");
+            const botao = document.getElementById("btnEnviar");
+
+            let bloqueado = false;
+
+            form.addEventListener("submit", function () {
+
+            if (bloqueado) return false;
+
+            bloqueado = true;
+            botao.disabled = true;
+            botao.innerText = "Enviando...";
+        });
+    });
+    
+    </script>
+
+    </div>
+</body>
+
+</html>
